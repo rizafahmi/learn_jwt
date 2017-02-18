@@ -25,5 +25,30 @@ app.get('/', (req, res) => {
   res.send(`Hello! The API is at http://localhost:${port}/api`)
 })
 
+app.get('/setup', (req, res) => {
+  const admin = new User({
+    name: 'riza',
+    password: '220281',
+    admin: true
+  })
+  admin.save((err) => {
+    if (err)
+      throw err
+    console.log('User saved successfully')
+    res.json({status: 'OK'})
+  })
+})
+
+const apiRoutes = express.Router()
+
+apiRoutes.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to the coolest API on earth!',
+    status: 'OK'
+  })
+})
+
+app.use('/api', apiRoutes)
+
 app.listen(port)
 console.log(`Magic happen at http://localhost:${port}`)
