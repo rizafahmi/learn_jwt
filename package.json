@@ -1,0 +1,7 @@
+{
+  "name": "learn_jwt",
+  "version": "0.0.1",
+  "main": "server.js",
+  "author": "Riza Fahmi",
+  "license": "MIT"
+}
