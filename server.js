@@ -41,10 +41,50 @@ app.get('/setup', (req, res) => {
 
 const apiRoutes = express.Router()
 
+apiRoutes.post('/authenticate', (req, res) => {
+  User.findOne({
+    name: req.body.name
+  }, (err, user) => {
+    if (err) throw err
+
+    debugger
+    if (!user) {
+      res.json({
+        status: 'KO',
+        message: 'Authentication failed. User not found.'
+      })
+    } else if (user) {
+      if (user.password !== req.body.password) {
+        res.json({
+          status: 'KO',
+          message: 'Authentication failed. Wrong password.'
+        })
+      } else {
+        debugger
+        const token = jwt.sign(user, app.get('superSecret'), {
+          expiresIn: 60*60*24 // expires in 24 hours
+        })
+
+        res.json({
+          status: 'OK',
+          message: 'Enjoy your token!',
+          token: token
+        })
+      }
+    }
+  })
+})
+
 apiRoutes.get('/', (req, res) => {
   res.json({
     message: 'Welcome to the coolest API on earth!',
     status: 'OK'
+  })
+})
+
+apiRoutes.get('/users', (req, res) => {
+  User.find({}, (err, users) => {
+    res.json(users)
   })
 })
 
